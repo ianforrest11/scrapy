@@ -16,4 +16,7 @@ class JobSpider(scrapy.Spider):
                 'rating': job.css('span.ratingsContent::text').extract()
             }
         
+        next_page = response.css('div.pagination a::attr("href")').get()
+        if next_page is not None:
+            yield response.follow(next_page, self.parse)
         
