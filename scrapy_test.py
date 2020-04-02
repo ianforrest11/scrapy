@@ -1,16 +1,19 @@
 import scrapy
 
+
 class JobSpider(scrapy.Spider):
     name = 'jobs'
     start_urls = [
-        'https://entrylevel.io/',
+        'https://www.indeed.com/q-data-science-l-New-York,-NY-jobs.html',
     ]
 
     def parse(self, response):
-        for job in response.css('ul.job-list'):
+        for job in response.css('div.jobsearch-SerpJobCard'):
             yield {
-                #'title': quote.xpath('span/small/text()').get(),
-                'title': job.xpath('h1/text()').get(),
-                #'text': quote.css('span.text::text').get(),
-                'location': job.css('p[1]/text()').get(),
+                'job_title': job.css('a.jobtitle::text').extract(),
+                'company': job.css('span.company::text').extract(),
+                'location': job.css('div.accessible-contrast-color-location::text').extract(),
+                'rating': job.css('span.ratingsContent::text').extract()
             }
+        
+        
