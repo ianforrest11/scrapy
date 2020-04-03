@@ -3,9 +3,9 @@ import scrapy
 
 class JobSpider(scrapy.Spider):
     name = 'jobs'
-    page_number = 10
+    page_number = 0
     start_urls = [
-        'https://www.indeed.com/jobs?q=data+science&l=New+York,+NY&start=0',
+        'https://www.indeed.com/jobs?q=data+science&l=New+York,+NY&start='+ str(page_number) +'',
     ]
 
     def parse(self, response):
@@ -19,8 +19,8 @@ class JobSpider(scrapy.Spider):
                 'date_posted': job.css('span.date::text').extract()
             }
         
-        next_page = 'https://www.indeed.com/jobs?q=data+science&l=New+York,+NY&start='+ str(JobSpider.page_number) +''
-        JobSpider.page_number += 10
-        if JobSpider.page_number < 1093:
-            yield response.follow(next_page, callback = self.parse)
         
+        next_page = 'https://www.indeed.com/jobs?q=data+science&l=New+York,+NY&start='+ str(JobSpider.page_number) +''
+        if JobSpider.page_number < 1093:
+            JobSpider.page_number += 10
+            yield response.follow(next_page, callback = self.parse)
