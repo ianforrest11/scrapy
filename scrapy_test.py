@@ -12,11 +12,9 @@ class JobSpider(scrapy.Spider):
     def parse(self, response):
         for job in response.css('div.jobsearch-SerpJobCard'):
             yield {
-                'job_id': job.css('div').attrib['id'],
-                # 'job_title': job.css('a.jobtitle::text').extract(),
+                'job_id': job.css('div').attrib['data-jk'],
                 'job_title': job.css('a.jobtitle').attrib['title'],
                 'company': job.css('span.company a.turnstileLink::text').extract(),
-                # 'location': job.css('div.accessible-contrast-color-location::text').extract(),
                 'location': job.css('div.recJobLoc').attrib['data-rc-loc'],               
                 'rating': job.css('span.ratingsContent::text').extract(),
                 'date_posted': job.css('span.date::text').extract()
