@@ -1,5 +1,6 @@
+# extracts info from
+
 import scrapy
-from scrapy.exceptions import DropItem
 
 
 class JobSpider(scrapy.Spider):
