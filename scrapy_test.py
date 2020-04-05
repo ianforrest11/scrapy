@@ -16,7 +16,8 @@ class JobSpider(scrapy.Spider):
                 'job_id': job.css('div').attrib['data-jk'],
                 'job_title': job.css('a.jobtitle').attrib['title'],
                 'company': job.css('span.company a.turnstileLink::text').extract(),
-                'location': job.css('div.recJobLoc').attrib['data-rc-loc'],               
+                'location': job.css('div.recJobLoc').attrib['data-rc-loc'],
+                'salary': job.css('span.salaryText::text').extract(),               
                 'rating': job.css('span.ratingsContent::text').extract(),
                 'date_posted': job.css('span.date::text').extract(),
                 'link': 'www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href'])
