@@ -21,14 +21,14 @@ class JobPipeline(object):
         self.cursor.execute("""DROP TABLE IF EXISTS jobs_tb""")
         self.cursor.execute("""create table jobs_tb(
                   job_id text,
-                  job_title text,
-                  company text,
-                  location text,
-                  salary text,
-                  rating text,
-                  job_desc text,
-                  date_posted text,
-                  link text
+                  job_position text,
+                  company_name text,
+                  job_location text,
+                  job_salary text,
+                  job_description text,
+                  published_at text,
+                  application_link text,
+                  source text
                   )""")
     
     def process_item(self, item, spider):
@@ -38,13 +38,13 @@ class JobPipeline(object):
     def store_db(self, item):
         self.cursor.execute("""INSERT INTO jobs_tb VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",(
             item['job_id'][0],
-            item['job_title'][0],
-            item['company'][0],
-            item['location'][0],
-            item['salary'][0],
-            item['rating'][0],
-            item['job_desc'][0],
-            item['date_posted'][0],
-            item['link']
+            item['job_position'][0],
+            item['company_name'][0],
+            item['job_location'][0],
+            item['job_salary'][0],
+            item['job_description'][0],
+            item['published_at'][0],
+            item['application_link'],
+            item['source'][0]
         ))
         self.conn.commit()

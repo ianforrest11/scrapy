@@ -23,25 +23,25 @@ class JobSpider(scrapy.Spider):
         # change keys to match existing project
         for job in response.css('div.jobsearch-SerpJobCard'):
             job_id =  job.css('div').attrib['data-jk'],
-            job_title = job.css('a.jobtitle').attrib['title'],
-            company = job.css('span.company a.turnstileLink::text').get(),
-            location = job.css('div.recJobLoc').attrib['data-rc-loc'],
-            salary = job.css('span.salaryText::text').get(),               
-            rating = job.css('span.ratingsContent::text').get(),
-            job_desc = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall())),
-            date_posted = job.css('span.date::text').get(),
-            link = 'www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href'])
+            job_position = job.css('a.jobtitle').attrib['title'],
+            company_name = job.css('span.company a.turnstileLink::text').get(),
+            job_location = job.css('div.recJobLoc').attrib['data-rc-loc'],
+            job_salary = job.css('span.salaryText::text').get(),
+            job_description = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall())),
+            published_at = job.css('span.date::text').get(),
+            application_link = 'www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href'])
+            source = 'Indeed.com'
             
             #convert to item object
             items['job_id'] = job_id
-            items['job_title'] = job_title
-            items['company'] = company
-            items['location'] = location
-            items['salary'] = salary
-            items['rating'] = rating
-            items['job_desc'] = job_desc
-            items['date_posted'] = date_posted
-            items['link'] = link
+            items['job_position'] = job_position
+            items['company_name'] = company_name
+            items['job_location'] = job_location
+            items['job_salary'] = job_salary
+            items['job_description'] = job_description
+            items['published_at'] = published_at
+            items['application_link'] = application_link
+            items['source'] = source
             
             
             
