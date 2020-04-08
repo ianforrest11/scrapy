@@ -4,7 +4,7 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-import sqlite3
+import psycopg2
 
 
 class JobPipeline(object):
@@ -13,11 +13,11 @@ class JobPipeline(object):
         self.create_table()
     
     def create_connection(self):
-        self.conn = sqlite3.connect('jobs.db')
+        self.conn = psycopg2.connect(dbname = 'ceforqty', user= "ceforqty", password="GYh0O6sCjsdPPgZXg4DRYzL3Y9LDC5gl", host="salt.db.elephantsql.com")
         self.cursor = self.conn.cursor()
         
     def create_table(self):
-        self.cursor.execute("""DROP TABLE IF EXISTS jobs""")
+        self.cursor.execute("""DROP TABLE IF EXISTS jobs_tb""")
         self.cursor.execute("""create table jobs_tb(
                   job_id text,
                   job_title text,
@@ -35,7 +35,7 @@ class JobPipeline(object):
         return item
     
     def store_db(self, item):
-        self.cursor.execute("""insert into jobs_tb values (?, ?, ?, ?, ?, ?, ?, ?, ?)""",(
+        self.cursor.execute("""INSERT INTO jobs_tb VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",(
             item['job_id'][0],
             item['job_title'][0],
             item['company'][0],
@@ -44,6 +44,6 @@ class JobPipeline(object):
             item['rating'][0],
             item['job_desc'][0],
             item['date_posted'][0],
-            item['link'][0]
+            item['link']
         ))
         self.conn.commit()
