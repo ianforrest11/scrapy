@@ -12,6 +12,7 @@ class JobPipeline(object):
         self.create_connection()
         self.create_table()
     
+    # look up test indexing
     def create_connection(self):
         self.conn = psycopg2.connect(dbname = 'ceforqty', user= "ceforqty", password="GYh0O6sCjsdPPgZXg4DRYzL3Y9LDC5gl", host="salt.db.elephantsql.com")
         self.cursor = self.conn.cursor()

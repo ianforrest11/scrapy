@@ -19,6 +19,8 @@ class JobSpider(scrapy.Spider):
         items = JobItem()
         
         #scrape info from website
+        # to update - remove rating
+        # change keys to match existing project
         for job in response.css('div.jobsearch-SerpJobCard'):
             job_id =  job.css('div').attrib['data-jk'],
             job_title = job.css('a.jobtitle').attrib['title'],
