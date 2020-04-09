@@ -5,7 +5,7 @@ import re
 from ..items import JobItem
 
 
-class JobSpider(scrapy.Spider):
+class IndeedSpider(scrapy.Spider):
     name = 'indeed'
     job_title = ''
     locations = ['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL',
@@ -60,7 +60,6 @@ class JobSpider(scrapy.Spider):
         
         next_page = response.css('div.pagination')
         next_page = next_page.css('a::attr(href)')[-1].get()
-        print(next_page)
         if next_page is not None:
             next_page = response.urljoin(next_page)
             yield scrapy.Request(next_page, callback=self.parse)
