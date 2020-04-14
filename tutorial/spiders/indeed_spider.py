@@ -3,6 +3,7 @@
 import scrapy
 import re
 from ..items import JobItem
+from ..functions import iso_date
 
 
 class IndeedSpider(scrapy.Spider):
@@ -39,7 +40,7 @@ class IndeedSpider(scrapy.Spider):
                 job_location = job.css('div.recJobLoc').attrib['data-rc-loc'],
                 job_salary = job.css('span.salaryText::text').get(),
                 job_description = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall())),
-                published_at = job.css('span.date::text').get(),
+                published_at = iso_date(job.css('span.date::text').get()),
                 application_link = 'www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href'])
                 source = 'Indeed.com'
                 

@@ -45,6 +45,6 @@ class JobPipeline(object):
             item['job_description'][0],
             item['published_at'][0],
             item['application_link'],
-            item['source'][0]
+            item['source']
         ))
         self.conn.commit()
