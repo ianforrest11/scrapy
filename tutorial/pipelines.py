@@ -42,9 +42,9 @@ class JobPipeline(object):
             item['job_position'][0],
             item['company_name'][0],
             item['job_location'][0],
-            item['job_salary'][0],
+            item['job_salary'],
             item['job_description'][0],
-            item['published_at'][0],
+            item['published_at'],
             item['application_link'],
             item['source']
         ))
