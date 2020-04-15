@@ -2,8 +2,9 @@
 
 import scrapy
 import re
+from scrapy.loader import ItemLoader
 from ..items import JobItem
-from ..functions import iso_date
+from ..functions import iso_date, parse
 
 
 class IndeedSpider(scrapy.Spider):
@@ -32,7 +33,7 @@ class IndeedSpider(scrapy.Spider):
             job_desc_str = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall()))
             job_string = job_title_str + job_desc_str
             key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad']
-            
+            #''.join(item.xpath('li[@class="desc"]//text()').extract())
             if any(x in job_string for x in key_words):
                 job_id =  job.css('div').attrib['data-jk'],
                 job_position = job.css('a.jobtitle').attrib['title'],
@@ -43,7 +44,7 @@ class IndeedSpider(scrapy.Spider):
                 published_at = iso_date(job.css('span.date::text').get()),
                 application_link = 'www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href'])
                 source = 'Indeed.com'
-                
+
                 #convert to item object
                 items['job_id'] = job_id
                 items['job_position'] = job_position

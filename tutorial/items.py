@@ -1,4 +1,6 @@
 import scrapy
+from scrapy.loader import ItemLoader
+from scrapy.loader.processors import TakeFirst
 
 
 class JobItem(scrapy.Item):
@@ -12,3 +14,7 @@ class JobItem(scrapy.Item):
     published_at = scrapy.Field()
     application_link = scrapy.Field()
     source = scrapy.Field()
+    
+class JobLoader(ItemLoader):
+    default_item_class = JobItem
+    default_output_processor = TakeFirst()
