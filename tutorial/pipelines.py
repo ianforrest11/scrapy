@@ -34,11 +34,11 @@ class JobPipeline(object):
     def store_db(self, item):
         self.cursor.execute("""INSERT INTO jobs_tb VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)""",(
             item['job_id'],
-            item['job_position'][0],
-            item['company_name'][0],
-            item['job_location'][0],
+            item['job_position'],
+            item['company_name'],
+            item['job_location'],
             item['job_salary'],
-            item['job_description'][0],
+            item['job_description'],
             item['published_at'],
             item['application_link'],
             item['source']
@@ -69,9 +69,12 @@ class BlankPipeline(object):
             item['job_salary'] = 'Not Available'
             return item
         
-        # if item.get('company_name') == '\n':
-        #     item['company_name'] = 'Not Available'
-        #     return item
+        if item.get('company_name'):
+            item['company_name'] = item['company_name']
+            return item
+        else:
+            item['company_name'] = 'Not Available'
+            return item
 
 
 class JsonWriterPipeline(object):

@@ -3,7 +3,7 @@
 import scrapy
 import re
 from ..items import JobItem, JobLoader
-from ..functions import iso_date, parse
+from ..functions import iso_date
 from scrapy.loader.processors import TakeFirst
 
 
@@ -35,10 +35,13 @@ class IndeedSpider(scrapy.Spider):
                 l = JobLoader(item=JobItem(), selector=job)
                 l.add_css('job_id','div::attr(data-jk)')
                 l.add_css('job_position', 'a.jobtitle::attr(title)')
+                l.add_css('company_name', 'span.company::text')
+                #l.add_css('comapny_name', 'span.company a.turnstileLink::text')
                 l.add_value('company_name', job.css('span.company a.turnstileLink::text').get())
                 l.add_css('job_location', 'div.recJobLoc::attr(data-rc-loc)')
                 l.add_css('job_salary', 'span.salaryText::text')
                 l.add_css('job_description', 'div.summary li::text')
+                l.add_css('job_description', 'div.summary::text')
                 l.add_value('published_at', iso_date(job.css('span.date::text').get()))
                 l.add_value('application_link','www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href']))
                 l.add_value('source','Indeed.com')

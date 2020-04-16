@@ -10,15 +10,9 @@ def iso_date(date_string):
         date_N_days_ago = datetime.now().date() - timedelta(days=parsed_date)
         return date_N_days_ago
     
-    
-def parse(x):
-    shape = {"job_id": x.get("job_id")[0],
-            'job_position': x.get("job_position")[0],
-            'company_name': x.get("company_name")[0],
-            'job_location': x.get("job_location")[0],
-            'job_salary': x.get("job_salary")[0],
-            'job_description': x.get("job_description")[0],
-            'published_at': x.get("published_at")[0],
-            'application_link': x.get("application_link"),
-            'source': x.get("source")}
-    return shape
+
+def remove_unwanted(value):
+    x = value.replace(u'\n', "")
+    x = value.replace(u'\n ', "")
+    x = x.lstrip()
+    return x

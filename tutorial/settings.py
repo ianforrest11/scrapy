@@ -66,8 +66,9 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    
+   'tutorial.pipelines.BlankPipeline': 297,
    'tutorial.pipelines.DuplicatesPipeline': 298,
-   'tutorial.pipelines.BlankPipeline': 299,
+   # 'tutorial.pipelines.BlankPipeline': 299,
    # 'tutorial.pipelines.PostPipeline': 300,
    'tutorial.pipelines.JsonWriterPipeline': 300,
    'tutorial.pipelines.JobPipeline': 301
