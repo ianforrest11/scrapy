@@ -65,7 +65,13 @@ ROBOTSTXT_OBEY = True
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'tutorial.pipelines.JobPipeline': 300,
+   
+   'tutorial.pipelines.DuplicatesPipeline': 298,
+   'tutorial.pipelines.BlankPipeline': 299,
+   # 'tutorial.pipelines.PostPipeline': 300,
+   'tutorial.pipelines.JsonWriterPipeline': 300,
+   'tutorial.pipelines.JobPipeline': 301
+   
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

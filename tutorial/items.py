@@ -1,6 +1,7 @@
 import scrapy
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst
+from scrapy.loader.processors import TakeFirst, MapCompose
+import unicodedata
 
 
 class JobItem(scrapy.Item):
