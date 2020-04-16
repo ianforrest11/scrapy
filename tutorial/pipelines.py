@@ -125,3 +125,9 @@ class PostPipeline(object):
         except requests.exceptions.HTTPError as err:
             raise SystemExit(err)
 
+class DefaultItemPipeline(object):
+
+    def process_item(self, item, spider):
+        item.setdefault('published_at', 'Not Available')
+
+        return item

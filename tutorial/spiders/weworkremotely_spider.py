@@ -1,6 +1,9 @@
 import scrapy
 import re
-from ..items import JobItem
+from ..items import JobItem, JobLoader
+from ..functions import iso_date2
+from scrapy.loader.processors import TakeFirst
+import uuid
 
 
 class WeWorkRemotelySpider(scrapy.Spider):
@@ -10,42 +13,43 @@ class WeWorkRemotelySpider(scrapy.Spider):
 
     def parse(self, response):
         
-        items = JobItem()
-        
         #scrape info from website
         for job in response.css('li.feature'):
             
             # set up string for key word analysis
-            # job_title_str = job.css('span.title::text').get()
-            # job_desc_str = ''
-            # job_string = job_title_str + job_desc_str
-            # key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad']
+            job_title_str = job.css('span.title::text').get()
+            job_desc_str = ''
+            job_string = job_title_str + job_desc_str
+            key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant']
             
-            # if any(x in job_string for x in key_words):
-            job_id = 'None' #job.css('div').attrib['data-jk'],
-            job_position = job.css('span.title::text').get(),
-            company_name = job.css('span.company::text').get(),
-            job_location = 'Remote' #job.css('div.recJobLoc').attrib['data-rc-loc'],
-            job_salary = 'Follow link' #job.css('span.salaryText::text').get(),
-            job_description = 'Follow link' #job.css('p.job-result-card__snippet').get(),
-            published_at = job.css('time::text').get(),
-            application_link = 'www.weworkremotely.com{}'.format(job.css('li > a').attrib['href'])
-            source = 'WeWorkRemotely.com'
+            if any(x in job_string for x in key_words):
+                l = JobLoader(item=JobItem(), selector=job)
+                l.add_value('job_id', job.css('li > a').attrib['href'])
+                l.add_css('job_position', 'span.title::text')
+                l.add_css('company_name', 'span.company::text')
+                l.add_value('job_location', 'Remote')
+                l.add_value('job_salary', 'Not Available')
+                l.add_value('job_description', 'Not Available')
+                l.add_value('published_at', iso_date2(job.css('time::text').get(default='N/A')))
+                l.add_value('application_link','www.weworkremotely.com{}'.format(job.css('li > a').attrib['href']))
+                l.add_value('source','WeWorkRemotely.com')
+                it = l.load_item()
 
-            #convert to item object
-            items['job_id'] = job_id
-            items['job_position'] = job_position
-            items['company_name'] = company_name
-            items['job_location'] = job_location
-            items['job_salary'] = job_salary
-            items['job_description'] = job_description
-            items['published_at'] = published_at
-            items['application_link'] = application_link
-            items['source'] = source
+                yield it            
+            # if any(x in job_string for x in key_words):
+            # job_id = 'None' #job.css('div').attrib['data-jk'],
+            # job_position = job.css('span.title::text').get(),
+            # company_name = job.css('span.company::text').get(),
+            # job_location = 'Remote' #job.css('div.recJobLoc').attrib['data-rc-loc'],
+            # job_salary = 'Follow link' #job.css('span.salaryText::text').get(),
+            # job_description = 'Follow link' #job.css('p.job-result-card__snippet').get(),
+            # published_at = job.css('time::text').get(),
+            # application_link = 'www.weworkremotely.com{}'.format(job.css('li > a').attrib['href'])
+            # source = 'WeWorkRemotely.com'
             
             
             
-            yield items
+ 
         
         # next_page = response.css('div.pagination')
         # next_page = next_page.css('a::attr(href)')[-1].get()
