@@ -56,8 +56,6 @@ class IndeedSpider(scrapy.Spider):
                 items['application_link'] = application_link
                 items['source'] = source
                 
-                for item in items:
-                    ''.join(item)
                 
                 yield items
         
