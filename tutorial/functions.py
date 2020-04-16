@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 import re
+import requests
+import json
 
 def iso_date(date_string):
     if any(char.isdigit() for char in date_string) == False:
@@ -16,3 +18,16 @@ def remove_unwanted(value):
     x = value.replace(u'\n ', "")
     x = x.lstrip()
     return x
+
+
+def export():
+    with open('/Users/ianforrest/Desktop/coding/repos/ianforrest11/scrapy/jobs.json', 'r') as f:
+        indeed_dict = json.load(f)
+    
+    url = 'https://api.entrylevel.io/test/doc'
+
+    headers = {'Content-type': 'application/json'}
+
+    for x in indeed_dict:
+        job = requests.post(url, json = x, headers=headers)
+        print(job.text)

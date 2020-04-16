@@ -1,6 +1,9 @@
 import psycopg2
 from scrapy.exceptions import DropItem
 import json
+import requests
+import scrapy 
+from .functions import export
 
 
 class JobPipeline(object):
@@ -88,9 +91,25 @@ class JsonWriterPipeline(object):
     def process_item(self, item, spider):
         line = json.dumps(dict(item), default=str) + "\n"
         self.file.write(line)
+        
+        url = 'https://api.entrylevel.io/test/doc'
+        headers = {'Content-type': 'application/json'}
+        
         return item
 
 
 
 
+class PostPipeline(object):
+
+    def process_item(self, item, spider):     
+        url = 'https://api.entrylevel.io/test/doc'
+        headers = {'Content-type': 'application/json'}
+          
+        r = requests.post(url, data=item, headers=headers)
+        if r.status_code == 200:
+            print('Item posted to DB successfully!')
+            return item
+        else:
+            print("Failed to post item with id %s." % item['job_id'])
 
