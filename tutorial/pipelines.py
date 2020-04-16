@@ -3,7 +3,6 @@ from scrapy.exceptions import DropItem
 import json
 import requests
 import scrapy 
-from .functions import export
 
 
 class JobPipeline(object):
@@ -92,8 +91,8 @@ class JsonWriterPipeline(object):
         line = json.dumps(dict(item), default=str) + "\n"
         self.file.write(line)
         
-        url = 'https://api.entrylevel.io/test/doc'
-        headers = {'Content-type': 'application/json'}
+        # url = 'https://api.entrylevel.io/test/doc'
+        # headers = {'Content-type': 'application/json'}
         
         return item
 
