@@ -99,16 +99,29 @@ class JsonWriterPipeline(object):
 
 
 
-class PostPipeline(object):
+# class PostPipeline(object):
 
+#     def process_item(self, item, spider):     
+#         url = 'https://api.entrylevel.io/test/doc'
+#         headers = {'Content-type': 'application/json'}
+        
+#         r = requests.post(url, data=json.dumps(dict(item), default = str), headers=headers)
+#         if r.status_code == 200:
+#             print('Item posted to DB successfully!')
+#             return item
+#         else:
+#             print("Failed to post item with id %s." % item['job_id'])
+            
+            
+class PostPipeline(object):
+    
     def process_item(self, item, spider):     
         url = 'https://api.entrylevel.io/test/doc'
         headers = {'Content-type': 'application/json'}
-          
-        r = requests.post(url, data=item, headers=headers)
-        if r.status_code == 200:
+        
+        try:
+            r = requests.post(url, data=json.dumps(dict(item), default = str), headers=headers)
             print('Item posted to DB successfully!')
-            return item
-        else:
-            print("Failed to post item with id %s." % item['job_id'])
+        except requests.exceptions.HTTPError as err:
+            raise SystemExit(err)
 

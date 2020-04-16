@@ -68,7 +68,7 @@ ITEM_PIPELINES = {
    
    'tutorial.pipelines.BlankPipeline': 297,
    'tutorial.pipelines.DuplicatesPipeline': 298,
-   #'tutorial.pipelines.PostPipeline': 303,
+   'tutorial.pipelines.PostPipeline': 303,
    'tutorial.pipelines.JsonWriterPipeline': 301,
    'tutorial.pipelines.JobPipeline': 302
    
