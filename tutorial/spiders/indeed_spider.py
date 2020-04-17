@@ -8,7 +8,7 @@ from scrapy.loader.processors import TakeFirst
 
 
 class IndeedSpider(scrapy.Spider):
-    name = 'indeed2'
+    name = 'indeed'
     job_title = ''
     locations = ['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL',
                'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA',
@@ -35,9 +35,8 @@ class IndeedSpider(scrapy.Spider):
                 l = JobLoader(item=JobItem(), selector=job)
                 l.add_css('job_id','div::attr(data-jk)')
                 l.add_css('job_position', 'a.jobtitle::attr(title)')
-                l.add_css('company_name', 'span.company::text')
-                #l.add_css('comapny_name', 'span.company a.turnstileLink::text')
-                l.add_value('company_name', job.css('span.company a.turnstileLink::text').get())
+                l.add_value('company_name', job.css('span.company::text').get(default = 'Not Available'))
+                l.add_value('company_name', job.css('span.company a.turnstileLink::text').get(default = 'Not Available'))
                 l.add_css('job_location', 'div.recJobLoc::attr(data-rc-loc)')
                 l.add_css('job_salary', 'span.salaryText::text')
                 l.add_css('job_description', 'div.summary li::text')
