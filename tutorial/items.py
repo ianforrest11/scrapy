@@ -8,9 +8,9 @@ from .functions import remove_unwanted
 class JobItem(scrapy.Item):
     # define the fields for your item here like:
     job_id = scrapy.Field()
-    job_position = scrapy.Field()
+    job_position = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted))
     company_name = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted), output_processor = Join(separator=u''))
-    job_location = scrapy.Field()
+    job_location = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted))
     job_salary = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted))
     job_description = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted), output_processor = Join(separator=u''))
     published_at = scrapy.Field()
