@@ -29,7 +29,7 @@ class IndeedSpider(scrapy.Spider):
             job_title_str = job.css('a.jobtitle').attrib['title']
             job_desc_str = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall()))
             job_string = job_title_str + job_desc_str
-            key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant']
+            key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant', 'Staff']
             
             if any(x in job_string for x in key_words):
                 l = JobLoader(item=JobItem(), selector=job)

@@ -7,9 +7,18 @@ from ..functions import iso_date
 from scrapy.loader.processors import TakeFirst
 
 
-class IndeedSpider(scrapy.Spider):
+class MonsterSpider(scrapy.Spider):  
     name = 'monster'
-    start_urls = ['https://www.monster.com/jobs/search/?where=new-york']
+    locations = ['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL',
+                'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA',
+                'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE',
+                'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI',
+                'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY']   
+    start_urls = []
+    
+    for location in locations:
+        url = 'https://www.monster.com/jobs/search/?where='+ location.replace(" ", "+") +''
+        start_urls.append(url)   
 
 
     def parse(self, response):
@@ -20,7 +29,7 @@ class IndeedSpider(scrapy.Spider):
             # job_title_str = 'manager'#job.css('h5 > a::text')
             # job_desc_str = 'job' #re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall()))
             # job_string = job_title_str + job_desc_str
-            # key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant']
+            # key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant', 'Staff']
 
             # if any(x in job_string for x in key_words):
                 l = JobLoader(item=JobItem(), selector=job)
@@ -41,9 +50,9 @@ class IndeedSpider(scrapy.Spider):
                 yield it
 
 
-        
-        # next_page = response.css('ul.pagination')
-        # next_page = next_page.css('li.pagination::attr(href)')[-1].get()
-        # if next_page is not None:
-        #     next_page = response.urljoin(next_page)
-        #     yield scrapy.Request(next_page, callback=self.parse)
+        # TODO fix pagination
+        next_page = response.css('a.mux-btn::attr(href)').get()
+        #next_page = next_page.css('a.mux-btn::attr(href)').get()
+        if next_page is not None:
+            #next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)
