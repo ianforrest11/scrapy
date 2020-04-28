@@ -15,23 +15,28 @@ class IndeedSpider(scrapy.Spider):
                 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE',
                  'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI',
                   'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY']
+    key_words = ['Intern', 'Entry+Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant', 'Staff']
     start_urls = []
-    
-    for location in locations:
-        url = 'https://www.indeed.com/jobs?q='+ job_title.replace(" ", "+") +'&l='+ location.replace(" ", "+") +'&start=0'
-        start_urls.append(url)
+    for job in key_words:
+        for i in range(1,100):
+            for location in locations:
+                url = 'https://www.indeed.com/jobs?q={}&l={}&start={}'.format(job, location, i)
+                start_urls.append(url)
+    # for location in locations:
+    #     url = 'https://www.indeed.com/jobs?q='+ job_title.replace(" ", "+") +'&l='+ location.replace(" ", "+") +'&start=0'
+    #     start_urls.append(url)
 
     def parse(self, response):
         #scrape info from website
         for job in response.css('div.jobsearch-SerpJobCard'):
             
             # set up string for key word analysis
-            job_title_str = job.css('a.jobtitle').attrib['title']
-            job_desc_str = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall()))
-            job_string = job_title_str + job_desc_str
-            key_words = ['Intern', 'Entry Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant', 'Staff']
+            # job_title_str = job.css('a.jobtitle').attrib['title']
+            # job_desc_str = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall()))
+            # job_string = job_title_str + job_desc_str
+            # key_words = ['Intern', 'Entry+Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant', 'Staff']
             
-            if any(x in job_string for x in key_words):
+            # if any(x in job_string for x in key_words):
                 l = JobLoader(item=JobItem(), selector=job)
                 l.add_css('job_id','div::attr(data-jk)')
                 l.add_css('job_position', 'a.jobtitle::attr(title)')
