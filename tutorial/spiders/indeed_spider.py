@@ -22,39 +22,26 @@ class IndeedSpider(scrapy.Spider):
             for location in locations:
                 url = 'https://www.indeed.com/jobs?q={}&l={}&start={}'.format(job, location, i)
                 start_urls.append(url)
-    # for location in locations:
-    #     url = 'https://www.indeed.com/jobs?q='+ job_title.replace(" ", "+") +'&l='+ location.replace(" ", "+") +'&start=0'
-    #     start_urls.append(url)
 
     def parse(self, response):
         #scrape info from website
         for job in response.css('div.jobsearch-SerpJobCard'):
-            
-            # set up string for key word analysis
-            # job_title_str = job.css('a.jobtitle').attrib['title']
-            # job_desc_str = re.sub('<[^<]+?>', ' ', ''.join(job.css('div.summary li').getall()))
-            # job_string = job_title_str + job_desc_str
-            # key_words = ['Intern', 'Entry+Level', 'Entry-Level', 'Junior', 'Grad', 'Associate', 'Assistant', 'Staff']
-            
-            # if any(x in job_string for x in key_words):
-                l = JobLoader(item=JobItem(), selector=job)
-                l.add_css('job_id','div::attr(data-jk)')
-                l.add_css('job_position', 'a.jobtitle::attr(title)')
-                l.add_value('company_name', job.css('span.company::text').get(default = 'Not Available'))
-                l.add_value('company_name', job.css('span.company a.turnstileLink::text').get(default = 'Not Available'))
-                l.add_css('job_location', 'div.recJobLoc::attr(data-rc-loc)')
-                l.add_css('job_salary', 'span.salaryText::text')
-                l.add_css('job_description', 'div.summary li::text')
-                l.add_css('job_description', 'div.summary::text')
-                l.add_value('published_at', iso_date(job.css('span.date::text').get()))
-                l.add_value('application_link','www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href']))
-                l.add_value('source','Indeed.com')
-                it = l.load_item()
+            l = JobLoader(item=JobItem(), selector=job)
+            l.add_css('job_id','div::attr(data-jk)')
+            l.add_css('job_position', 'a.jobtitle::attr(title)')
+            l.add_value('company_name', job.css('span.company::text').get(default = 'Not Available'))
+            l.add_value('company_name', job.css('span.company a.turnstileLink::text').get(default = 'Not Available'))
+            l.add_css('job_location', 'div.recJobLoc::attr(data-rc-loc)')
+            l.add_value('country', 'US')
+            l.add_css('job_salary', 'span.salaryText::text')
+            l.add_css('job_description', 'div.summary li::text')
+            l.add_css('job_description', 'div.summary::text')
+            l.add_value('published_at', iso_date(job.css('span.date::text').get()))
+            l.add_value('application_link','www.indeed.com{}'.format(job.css('a.jobtitle').attrib['href']))
+            l.add_value('source','Indeed.com')
+            it = l.load_item()
 
-                yield it
-
-
-
+            yield it
         
         next_page = response.css('div.pagination')
         next_page = next_page.css('a::attr(href)')[-1].get()

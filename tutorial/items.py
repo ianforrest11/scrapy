@@ -11,6 +11,7 @@ class JobItem(scrapy.Item):
     job_position = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted))
     company_name = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted))
     job_location = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted))
+    country = scrapy.Field()
     job_salary = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted))
     job_description = scrapy.Field(input_processor = MapCompose(str.strip, remove_unwanted), output_processor = Join(separator=u''))
     published_at = scrapy.Field()
